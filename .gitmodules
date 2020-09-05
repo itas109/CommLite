@@ -1,0 +1,3 @@
+[submodule "thirdLib/CSerialPort"]
+	path = thirdLib/CSerialPort
+	url = https://gitee.com/itas109/CSerialPort
