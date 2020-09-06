@@ -262,7 +262,7 @@ void open(void)
         return;
     }
 
-    m_serialPort.init(m_portName);//windows:COM1 Linux:/dev/ttyS0
+    m_serialPort.init(m_portName,std::stoi(m_BaudRate));//windows:COM1 Linux:/dev/ttyS0
 
 	m_serialPort.open();
 	
