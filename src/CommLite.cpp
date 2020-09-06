@@ -132,10 +132,10 @@ std::string getPortSetting(void)
                     .append(",").append(m_StopBit);
     }
 
-    if(fieldbuf)
-    {
-        delete [] fieldbuf;
-    }
+    // if(fieldbuf)
+    // {
+    //     delete [] fieldbuf;
+    // }
     
     return result;
 }
@@ -166,10 +166,10 @@ std::string getSendData(void)
         result = m_sendData;
     }
     
-    if(fieldbuf)
-    {
-        delete [] fieldbuf;
-    }
+    // if(fieldbuf)
+    // {
+    //     delete [] fieldbuf;
+    // }
 
     return result;
 }
