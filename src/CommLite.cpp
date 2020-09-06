@@ -66,10 +66,10 @@ std::string ParityArray[] = {"None", "Odd", "Even", "Mark", "Space" };
 std::string StopArray[] = {"1", "1.5", "2"};
 
 std::string m_portName = "";
-std::string m_BaudRate = "";
-std::string m_Parity = "";
-std::string m_DataBit = "";
-std::string m_StopBit = "";
+std::string m_BaudRate = "9600";
+std::string m_Parity = "None";
+std::string m_DataBit = "8";
+std::string m_StopBit = "1";
 
 std::string m_portSetting = "";
 std::string m_sendData = "https://github.com/itas109/CSerialPort";
@@ -82,10 +82,7 @@ std::string getPortSetting(void)
 {
     std::string result = "";
 
-    char *fieldname[6] =
-    {
-        "PortName", "BaudRate", "Parity", "DataBit", "StopBit", (char *)0
-    };
+    char *fieldname[6] = {"PortName", "BaudRate", "Parity", "DataBit", "StopBit", (char *)0 };
 
     char *fieldbuf[5];
     WINDOW *wbody = bodywin();
@@ -93,50 +90,53 @@ std::string getPortSetting(void)
 
     for (i = 0; i < 5; i++)
     {
+        fieldbuf[i] = NULL;
     	fieldbuf[i] = new char[field + 1];
-    	fieldbuf[i] = "";
-        //fieldbuf[i] = calloc(1, field + 1);
-        //fieldbuf[i] = "";
     }
     
-    m_availablePortsList = CSerialPortInfo::availablePortInfos();
-    if(m_availablePortsList.size() > 0)
+    if(m_portName.empty())
     {
-    	fieldbuf[0] = const_cast<char*>(m_availablePortsList[0].portName.c_str());
+        m_availablePortsList = CSerialPortInfo::availablePortInfos();
+        if(m_availablePortsList.size() > 0)
+        {
+            fieldbuf[0] = const_cast<char*>(m_availablePortsList[0].portName.c_str());
+        }
+        else
+        {
+            fieldbuf[0] = const_cast<char*>(m_portName.c_str());
+        }
+        
     }
     else
     {
-    	fieldbuf[0] = "/dev/S0";
+        fieldbuf[0] = const_cast<char*>(m_portName.c_str());
     }
     
-    //fieldbuf[0] = "/dev/S0";
-    fieldbuf[1] = "9600";
-    fieldbuf[2] = "None";
-    fieldbuf[3] = "8";
-    fieldbuf[4] = "1";
-    
+    fieldbuf[1] = const_cast<char*>(m_BaudRate.c_str());
+    fieldbuf[2] = const_cast<char*>(m_Parity.c_str());
+    fieldbuf[3] = const_cast<char*>(m_DataBit.c_str());
+    fieldbuf[4] = const_cast<char*>(m_StopBit.c_str());
 
     if (getstrings(fieldname, fieldbuf, field) != KEY_ESC)
     {
-	m_portName = fieldbuf[0];
-	m_BaudRate = fieldbuf[1];
-	m_Parity = fieldbuf[2];
-	m_DataBit = fieldbuf[3];
-	m_StopBit = fieldbuf[4];
-	
-	result = result.append(m_portName)
-                .append(",").append(m_BaudRate)
-				.append(",").append(m_Parity)
-				.append(",").append(m_DataBit)
-				.append(",").append(m_StopBit);
+        m_portName = fieldbuf[0];
+        m_BaudRate = fieldbuf[1];
+        m_Parity = fieldbuf[2];
+        m_DataBit = fieldbuf[3];
+        m_StopBit = fieldbuf[4];
+        
+        result = result.append(m_portName)
+                    .append(",").append(m_BaudRate)
+                    .append(",").append(m_Parity)
+                    .append(",").append(m_DataBit)
+                    .append(",").append(m_StopBit);
     }
-/*
-    for (i = 0; i < 5; i++)
+
+    if(fieldbuf)
     {
-        //free(fieldbuf[i]);
-        delete fieldbuf[i];
+        delete [] fieldbuf;
     }
-    */
+    
     return result;
 }
 
@@ -162,17 +162,15 @@ std::string getSendData(void)
 
     if (getstrings(fieldname, fieldbuf, field) != KEY_ESC)
     {
-	m_sendData = fieldbuf[0];
-	
-	result = m_sendData;
+        m_sendData = fieldbuf[0];
+        result = m_sendData;
     }
-/*
-    for (i = 0; i < 1; i++)
+    
+    if(fieldbuf)
     {
-        //free(fieldbuf[i]);
-        delete fieldbuf[i];
+        delete [] fieldbuf;
     }
-    */
+
     return result;
 }
 
