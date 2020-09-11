@@ -85,7 +85,6 @@ std::string getPortSetting(void)
     char *fieldname[6] = {"PortName", "BaudRate", "Parity", "DataBit", "StopBit", (char *)0 };
 
     char *fieldbuf[5];
-    WINDOW *wbody = bodywin();
     int i, field = 50;
 
     for (i = 0; i < 5; i++)
@@ -119,11 +118,11 @@ std::string getPortSetting(void)
 
     if (getstrings(fieldname, fieldbuf, field) != KEY_ESC)
     {
-        m_portName = fieldbuf[0];
-        m_BaudRate = fieldbuf[1];
-        m_Parity = fieldbuf[2];
-        m_DataBit = fieldbuf[3];
-        m_StopBit = fieldbuf[4];
+        m_portName = std::string(fieldbuf[0]);
+        m_BaudRate = std::string(fieldbuf[1]);
+        m_Parity = std::string(fieldbuf[2]);
+        m_DataBit = std::string(fieldbuf[3]);
+        m_StopBit = std::string(fieldbuf[4]);
         
         result = result.append(m_portName)
                     .append(",").append(m_BaudRate)
@@ -150,7 +149,6 @@ std::string getSendData(void)
     };
 
     char *fieldbuf[1];
-    WINDOW *wbody = bodywin();
     int i, field = 50;
 
     for (i = 0; i < 1; i++)
@@ -162,7 +160,7 @@ std::string getSendData(void)
 
     if (getstrings(fieldname, fieldbuf, field) != KEY_ESC)
     {
-        m_sendData = fieldbuf[0];
+        m_sendData = std::string(fieldbuf[0]);
         result = m_sendData;
     }
     
