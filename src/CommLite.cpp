@@ -268,7 +268,7 @@ void open(void)
 	{
         char str[256];
         snprintf(str,sizeof(str),"open success. %s,%d,%s,%d,%s\n",
-                const_cast<char*>(m_portName.c_str()),
+                const_cast<char*>(m_serialPort.getPortName().c_str()),
                 m_serialPort.getBaudRate(),
                 const_cast<char*>(ParityArray[(int)(m_serialPort.getParity())].c_str()),
                 (int)(m_serialPort.getDataBits()),
@@ -297,7 +297,14 @@ void close(void)
 void getCommStatus(void)
 {
     char str[256];
-    snprintf(str,sizeof(str),"[ %s ] - %s", m_serialPort.isOpened()?"opened":"closed", const_cast<char*>(m_portSetting.c_str())); 
+    snprintf(str,sizeof(str),"[ %s ] - %s,%d,%s,%d,%s",
+             m_serialPort.isOpened()?"opened":"closed",
+             const_cast<char*>(m_serialPort.getPortName().c_str()),
+             m_serialPort.getBaudRate(),
+             const_cast<char*>(ParityArray[(int)(m_serialPort.getParity())].c_str()),
+             (int)(m_serialPort.getDataBits()),
+             const_cast<char*>(StopArray[(int)(m_serialPort.getStopBits())].c_str()));
+
     infomsg(str);
 }
 /***************************** SubMenuSend functions *************************/
