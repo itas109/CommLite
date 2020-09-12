@@ -172,12 +172,114 @@ std::string getSendData(void)
     return result;
 }
 
+/***************************** utils functions ***********************/
+
+char * HexStrFilter(char *charStr, char *fiterStr)
+{
+    if (charStr == NULL || fiterStr == NULL)
+    {
+        return NULL;
+    }
+
+    int len = strlen(charStr);
+
+    char *pTemp = fiterStr;
+
+    for(int i = 0; i < len; i++)
+    {
+        if( ((charStr[i] >= '0') && (charStr[i] <= '9')) ||
+            ((charStr[i] >= 'A') && (charStr[i] <= 'F')) ||
+            ((charStr[i] >= 'a') && (charStr[i] <= 'f')) )
+        {
+            *fiterStr++ = charStr[i];
+        }
+    }
+
+    return pTemp;
+}
+
+char CombineHexChar(char charH,char charL) /// CombineHexChar(A,B) result=1011;
+{
+    char result;
+
+    if(charH >= '0' && charH <= '9')
+    {
+        result = (charH - '0');
+    }
+    else if(charH >= 'a' && charH <= 'f')
+    {
+        result = (charH - 'a'+10);
+    }
+    else if(charH >= 'A' && charH <= 'F')
+    {
+        result = (charH - 'A' + 10);
+    }
+    else
+    {
+        result = 0;/// need to fiter non-hex character
+    }
+
+    result <<= 4;
+
+    if(charL >= '0' && charL <= '9')
+    {
+        result += (charL - '0');
+    }
+    else if(charL >= 'a' && charL <= 'f')
+    {
+        result += (charL - 'a'+10);
+    }
+    else if(charL >= 'A' && charL <= 'F')
+    {
+        result += (charL - 'A' + 10);
+    }
+    else
+    {
+        result += 0;
+    }
+
+    return result;
+}
+
+int Char2Hex(char *charStr,char *hexStr)/// character to hex, return value is hexStr length
+{
+    if (charStr == NULL || hexStr == NULL)
+    {
+        return 0;
+    }
+
+    int hexStrCount = 0;
+
+    char *fiterStr = NULL;
+    fiterStr = new char[strlen(charStr) + 1];
+    memset(fiterStr,0,strlen(charStr) + 1);
+
+    HexStrFilter(charStr,fiterStr);///filter non-hex character
+
+    int len = strlen(fiterStr);
+
+    // warn: if charStr length not even, the last charactor will lost
+    for(int i=0;i < len/2; i++)
+    {
+        *hexStr++ = CombineHexChar(fiterStr[i*2],fiterStr[i*2+1]);
+        hexStrCount++;
+    }
+
+    if(fiterStr)
+    {
+        delete [] fiterStr;
+        fiterStr = NULL;
+    }
+
+    return hexStrCount;
+}
+
 /***************************** forward declarations ***********************/
 // menu level 1
 void subSetting(void), subSend(void), subReceive(void),subHelp(void);
 // menu level 2
 void portSetting(void), open(void), close(void),getCommStatus(void);
-void send(void);
+void send(void), sendHex(void);
 void clearReceive(void);
 void author(void), CSerialPortAbout(void), commliteAbout(void);
 
@@ -204,7 +306,8 @@ menu SubMenuSetting[] =
 
 menu SubMenuSend[] =
 {
-    { "Send", send, "send some data to serial port" },
+    { "SendChar", send, "send char data to serial port" },
+    { "SendHex", sendHex, "send Hex data to serial port" },
     { "", (FUNC)0, "" }
 };
 
@@ -315,6 +418,34 @@ void send(void)
     {
         std::string str = getSendData();
         m_serialPort.writeData(const_cast<char*>(str.c_str()), str.length());
+    }
+    else
+    {
+        errormsg("Please set and open serial port first");
+    }
+}
+
+void sendHex(void)
+{
+    if(m_serialPort.isOpened())
+    {
+        std::string str = getSendData();
+        char* charStr = const_cast<char*>(str.c_str());
+        int len = strlen(charStr);
+        char *hexStr = NULL;
+        hexStr = new char[len + 1];
+        memset(hexStr,0,len + 1);
+
+        int hexStrLen = 0;
+        hexStrLen = Char2Hex(charStr,hexStr);
+
+        m_serialPort.writeData(hexStr,hexStrLen);
+
+        if(hexStr)
+        {
+            delete [] hexStr;
+            hexStr = NULL;
+        }
     }
     else
     {
