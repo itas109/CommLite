@@ -276,6 +276,64 @@ int Char2Hex(char *charStr,char *hexStr)/// character to hex, return value is he
     return hexStrCount;
 }
 
+int getParityIndex(std::string parity)
+{
+	// std::string ParityArray[] = {"None", "Odd", "Even", "Mark", "Space" };
+	int iRet = 0;
+	
+	if( "None" == parity )
+	{
+		// iRet = 0;
+	}
+	else if( "Odd" == parity )
+	{
+		iRet = 1;
+	}
+	else if( "Even" == parity )
+	{
+		iRet = 2;
+	}
+	else if( "Mark" == parity )
+	{
+		iRet = 3;
+	}
+	else if( "Space" == parity )
+	{
+		iRet = 4;
+	}
+	else
+	{
+		// iRet = 0;
+	}
+	
+	return iRet;
+}
+
+int getStopBitIndex(std::string parity)
+{
+	// std::string StopArray[] = {"1", "1.5", "2"};
+	
+	int iRet = 0;
+	
+	if( "1" == parity )
+	{
+		// iRet = 0;
+	}
+	else if( "1.5" == parity )
+	{
+		iRet = 1;
+	}
+	else if( "2" == parity )
+	{
+		iRet = 2;
+	}
+	else
+	{
+		// iRet = 0;
+	}
+	
+	return iRet;
+}
 /***************************** forward declarations ***********************/
 // menu level 1
 void subSetting(void), subSend(void), subReceive(void),subHelp(void);
@@ -365,7 +423,12 @@ void open(void)
         return;
     }
 
-    m_serialPort.init(m_portName,std::atoi(m_BaudRate.c_str()));//windows:COM1 Linux:/dev/ttyS0
+    m_serialPort.init(m_portName,//windows:COM1 Linux:/dev/ttyS0
+                      std::atoi(m_BaudRate.c_str()),
+					  itas109::Parity(getParityIndex(m_Parity)),
+                      itas109::DataBits(std::atoi(m_DataBit.c_str())),
+                      itas109::StopBits(getStopBitIndex(m_StopBit))
+					  );
 
 	m_serialPort.open();
 	
