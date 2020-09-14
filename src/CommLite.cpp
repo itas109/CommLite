@@ -338,7 +338,7 @@ int getStopBitIndex(std::string parity)
 // menu level 1
 void subSetting(void), subSend(void), subReceive(void),subHelp(void);
 // menu level 2
-void portSetting(void), open(void), close(void),getCommStatus(void);
+void portSetting(void), open(void), close(void),getCommStatus(void),getAvailablePort(void);
 void send(void), sendHex(void);
 void clearReceive(void);
 void author(void), CSerialPortAbout(void), commliteAbout(void);
@@ -356,10 +356,11 @@ menu MainMenu[] =
 
 menu SubMenuSetting[] =
 {
+    { "AvailablePort", getAvailablePort, "get Available Port Info" },
     { "PortSetting", portSetting, "set port name(COM1 or /dev/ttyS0), baudrate(9600), parity(None), databit(8), stopbit(1)" },
     { "Open", open, "open serial port" },
     { "Close", close, "close serial port" },
-    { "GetCommStatus", getCommStatus, "get Comm Status,such as [ opened ] - /dev/ttyS0,9600,None,8,1" },
+    { "CommStatus", getCommStatus, "get Comm Status,such as [ opened ] - /dev/ttyS0,9600,None,8,1" },
     { "Exit", DoExit, "Exit Appliction" },
     { "", (FUNC)0, "" }
 };
@@ -408,6 +409,37 @@ void subHelp(void)
 }
 
 /***************************** SubMenuSetting functions *************************/
+
+void getAvailablePort(void)
+{
+    char str[1024];
+    std::string portInfo;
+
+    m_availablePortsList = CSerialPortInfo::availablePortInfos();
+
+    int availablePortCount = m_availablePortsList.size();
+
+    snprintf(str,sizeof(str),"availableFriendlyPorts : ");
+
+    for (int i = 0; i < availablePortCount; i++)
+    {
+        portInfo.append(m_availablePortsList[i].portName)
+                .append(" ")
+                .append(m_availablePortsList[i].description)
+                .append("\n");
+    }
+
+    if (m_availablePortsList.size() != 0)
+    {
+        snprintf(str,sizeof(str),"\navailableFriendlyPorts : \n%s",portInfo.c_str());
+    }
+    else
+    {
+        snprintf(str,sizeof(str),"\navailableFriendlyPorts : No valid port\n");
+    }
+
+    bodymsg(str);
+}
 
 void portSetting(void)
 {
