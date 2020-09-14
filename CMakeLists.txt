@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.11)
 
 project(commlite LANGUAGES CXX)
 
-# IF (WIN32)
-# 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
-# ENDIF ()
+IF (WIN32)
+ 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
+ENDIF ()
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
@@ -70,8 +70,9 @@ add_executable( ${PROJECT_NAME} src/CommLite.cpp src/tui.cpp ${COMMON_SOURCES} $
 
 IF (WIN32)
 	# for function availableFriendlyPorts
-	# target_link_libraries( ${PROJECT_NAME} setupapi pdcurses libgcc.a libstdc++.a libpthread.a)
-	target_link_libraries( ${PROJECT_NAME} setupapi pdcurses)
+	# PDCurses-3.9\wincon : make -f Makefile WIDE=Y
+	target_link_libraries( ${PROJECT_NAME} setupapi pdcurses libgcc.a libstdc++.a libpthread.a)
+	# target_link_libraries( ${PROJECT_NAME} setupapi pdcurses)
 elseif(APPLE)
     target_link_libraries( ${PROJECT_NAME} ${FOUNDATION_LIBRARY} ${IOKIT_LIBRARY} ncurses)
 elseif(UNIX)
