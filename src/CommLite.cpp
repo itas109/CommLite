@@ -17,9 +17,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#include "tui.h"
 
+#include <cstdlib> // std::atoi
 #include <iostream>
+
+#include "tui.h"
 
 #define COMMLITE_VERSION "1.0.0"
 
@@ -363,7 +365,7 @@ void open(void)
         return;
     }
 
-    m_serialPort.init(m_portName,std::stoi(m_BaudRate));//windows:COM1 Linux:/dev/ttyS0
+    m_serialPort.init(m_portName,std::atoi(m_BaudRate.c_str()));//windows:COM1 Linux:/dev/ttyS0
 
 	m_serialPort.open();
 	
