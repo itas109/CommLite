@@ -32,6 +32,8 @@
 using namespace itas109;
 using namespace std;
 
+bool isShowHex = false;
+
 class mySlot : public has_slots<>
 {
 public:
@@ -46,12 +48,22 @@ public:
 		//read
 		recLen = m_sp.readAllData(str);
 
-		if(recLen > 0)
-		{
-			str[recLen] = '\0';
-
-            bodymsg(str);
-		}
+        if(recLen > 0)
+        {
+            if(!isShowHex)
+            {
+                str[recLen] = '\0';
+                bodymsg(str);
+            }
+            else
+            {
+                for (int i = 0; i < recLen; i++)
+                {
+                    snprintf(hexChar,sizeof(hexChar), "%02X ", str[i] & 0xFF);// two bit hex +  one bit space
+                    bodymsg(hexChar);
+                }
+            }
+        }
 	};
 
 private:
@@ -60,8 +72,9 @@ private:
 private:
 	CSerialPort m_sp;
 
+    int recLen;
+    char hexChar[3];// two bit hex +  one bit space
 	char str[1024];
-	int recLen;
 };
 
 std::string ParityArray[] = {"None", "Odd", "Even", "Mark", "Space" };
@@ -340,7 +353,7 @@ void subSetting(void), subSend(void), subReceive(void),subHelp(void);
 // menu level 2
 void portSetting(void), open(void), close(void),getCommStatus(void),getAvailablePort(void);
 void send(void), sendHex(void);
-void clearReceive(void);
+void clearReceive(void),receiveShowHex(void),receiveShowChar(void);
 void author(void), CSerialPortAbout(void), commliteAbout(void);
 
 /***************************** menus initialization ***********************/
@@ -374,7 +387,9 @@ menu SubMenuSend[] =
 
 menu SubMenuReceive[] =
 {
-    { "Clear Receive", clearReceive, "clear receive" },
+    { "ClearReceive", clearReceive, "clear receive" },
+    { "ReceiveShowChar", receiveShowChar, "receive show char, default option" },
+    { "ReceiveShowHex", receiveShowHex, "receive show hex" },
     { "", (FUNC)0, "" }
 };
 
@@ -555,6 +570,16 @@ void sendHex(void)
 void clearReceive(void)
 {
     clsbody();
+}
+
+void receiveShowChar(void)
+{
+    isShowHex = false;
+}
+
+void receiveShowHex(void)
+{
+    isShowHex = true;
 }
 
 /***************************** SubMenuHelp functions *************************/
