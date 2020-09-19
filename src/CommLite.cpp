@@ -59,7 +59,8 @@ public:
             {
                 for (int i = 0; i < recLen; i++)
                 {
-                    snprintf(hexChar,sizeof(hexChar), "%02X ", str[i] & 0xFF);// two bit hex +  one bit space
+                    snprintf(hexChar,sizeof(hexChar), "%02X ", str[i] & 0xFF);// two bit hex +  one bit space + '\0'
+                    hexChar[sizeof(hexChar)-1] = '\0';
                     bodymsg(hexChar);
                 }
             }
@@ -73,7 +74,7 @@ private:
 	CSerialPort m_sp;
 
     int recLen;
-    char hexChar[3];// two bit hex +  one bit space
+    char hexChar[4];// two bit hex +  one bit space + '\0'
 	char str[1024];
 };
 
@@ -575,11 +576,13 @@ void clearReceive(void)
 void receiveShowChar(void)
 {
     isShowHex = false;
+    infomsg("set receive show char");
 }
 
 void receiveShowHex(void)
 {
     isShowHex = true;
+    infomsg("set receive show hex");
 }
 
 /***************************** SubMenuHelp functions *************************/
