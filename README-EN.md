@@ -2,6 +2,7 @@
 
 CommLite is tui's serial port tool based CSerialPort
 
-* support windows dos，linux，macos,raspberrypi and so on
+* support x86, arm, mips cpu architecture
+* support windows dos, linux, macos,raspberrypi, freebsd operating system
 
 ![image](./pic/commlite.gif)
