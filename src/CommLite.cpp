@@ -375,7 +375,7 @@ menu SubMenuSetting[] =
     { "Open", open, "open serial port" },
     { "Close", close, "close serial port" },
     { "CommStatus", getCommStatus, "get Comm Status,such as [ opened ] - /dev/ttyS0,9600,None,8,1" },
-    { "Exit", DoExit, "Exit Appliction" },
+    //{ "Exit", DoExit, "Exit Appliction" },
     { "", (FUNC)0, "" }
 };
 
