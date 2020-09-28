@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=commlite
+Name[es]=commlite
+Name[zh_CN]=commlite
+Comment=commlite
+Comment[es]=commlite
+Comment[zh_CN]=commlite
+Exec=/opt/apps/com.itas109.commlite/bin/commlite
+Type=Application
+Categories=Application;
+Icon=/usr/share/icons/hicolor/scalable/apps/com.itas109.commlite.svg
+Terminal=true

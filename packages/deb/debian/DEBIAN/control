@@ -1,0 +1,8 @@
+Package: com.itas109.commlite
+Version: 1.0.0
+Architecture: amd64
+Section: utils
+Priority: standard
+Maintainer: itas109 <itas109@qq.com>
+Homepage: https://github.com/itas109/CommLite
+Description: textual user interface serial communication tool
