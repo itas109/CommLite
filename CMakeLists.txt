@@ -2,19 +2,24 @@ cmake_minimum_required(VERSION 3.11)
 
 project(commlite LANGUAGES CXX)
 
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
-
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
+
+option(COMMLITE_EXE_STATIC "Build static commlite" OFF)
 
 message(STATUS "CommLite CMake Info")
 message(STATUS "=======================================================")
 message(STATUS "    Operation System :  ${CMAKE_SYSTEM}")
 message(STATUS "    CPU Architecture : ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "    Build Type : ${CMAKE_BUILD_TYPE}${CMAKE_CONFIGURATION_TYPES}")
+message(STATUS "    EXE Static : ${COMMLITE_EXE_STATIC}")
 message(STATUS "=======================================================")
+
+if (COMMLITE_EXE_STATIC)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
+endif ()
 
 include(FetchContent)
 
@@ -84,7 +89,7 @@ elseif(UNIX)
 
 	add_custom_target(compile_ncurses
 		COMMAND ./configure --prefix=${ncurses_BINARY_DIR}
-		COMMAND make -j `grep -c ^processor /proc/cpuinfo`
+		COMMAND make -j 8
 		COMMAND make install
 		COMMENT "configure, compile and install ncurses"
 		WORKING_DIRECTORY ${ncurses_SOURCE_DIR}
