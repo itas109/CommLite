@@ -23,7 +23,7 @@ set(FETCHCONTENT_QUIET OFF CACHE INTERNAL "" FORCE)
 FetchContent_Declare( # cmake 3.11 above
 	CSerialPort
 	GIT_REPOSITORY https://gitee.com/itas109/CSerialPort
-	GIT_TAG f17b93655cbcdda8d8af1281fd70950d0a539e45 # 2020-09-20
+	GIT_TAG v4.1.0 # 2020-10-10
 	USES_TERMINAL_DOWNLOAD TRUE
 	)
 
