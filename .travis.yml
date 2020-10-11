@@ -1,0 +1,135 @@
+language: cpp
+
+# https://docs.travis-ci.com/user/languages/cpp
+
+# gcc 4.8
+addons: &gcc48
+  apt:
+    packages:
+      - g++-4.8
+    sources:
+      - ubuntu-toolchain-r-test
+
+# gcc 7.0
+addons: &gcc7
+  apt:
+    packages:
+      - g++-7
+    sources:
+      - ubuntu-toolchain-r-test
+
+# Clang 3.5
+addons: &clang35
+  apt:
+    packages:
+      - clang-3.5
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.5
+      
+
+addons: &clang10
+  apt:
+    packages:
+      - clang-10
+      - lldb-10
+      - lld-10
+    sources:
+      - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
+        key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
+
+
+jobs:
+  include:
+    # Test gcc-4.8: Build=Release
+    - env: GCC_VERSION=4.8 BUILD_TYPE=Release COMMLITE_EXE_STATIC=ON IS_UPDATE_CMAKE=TRUE
+      os: linux
+      arch: amd64
+      dist: trusty
+      addons: *gcc48
+
+    # Test gcc-7: Build=Release
+    - env: GCC_VERSION=7 BUILD_TYPE=Release COMMLITE_EXE_STATIC=ON
+      os: linux
+      arch: amd64
+      dist: xenial
+      addons: *gcc7
+
+    # Test clang-3.5: Build=Release
+    - env: CLANG_VERSION=3.5 BUILD_TYPE=Release COMMLITE_EXE_STATIC=ON
+      os: linux
+      arch: amd64
+      dist: xenial
+      addons: *clang35
+
+      # osx
+    - env: BUILD_TYPE=Release
+      os: osx
+      osx_image: xcode9.4
+
+    # Test clang-10.0: Build=Debug/Release
+    - env: CLANG_VERSION=10 BUILD_TYPE=Debug COMMLITE_EXE_STATIC=ON
+      os: linux
+      arch: amd64
+      dist: bionic
+      addons: *clang10
+
+    # Test gcc-7: Build=Debug/Release
+    - env: GCC_VERSION=7 BUILD_TYPE=Debug COMMLITE_EXE_STATIC=ON IS_UPDATE_CMAKE=FALSE
+      os: linux
+      arch: s390x
+      dist: focal
+      addons: *gcc7
+
+    - env: GCC_VERSION=7 BUILD_TYPE=Release COMMLITE_EXE_STATIC=ON IS_UPDATE_CMAKE=FALSE
+      os: linux
+      arch: ppc64le
+      dist: focal
+      addons: *gcc7
+    
+    # Test gcc-9: Build=Release
+    - env: GCC_VERSION=9 BUILD_TYPE=Release COMMLITE_EXE_STATIC=ON IS_UPDATE_CMAKE=FALSE
+      os: linux
+      arch: arm64
+      dist: focal
+
+
+before_script:
+  - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}"; fi
+  - if [ -n "$CLANG_VERSION" ]; then export CXX="clang++-${CLANG_VERSION}" CC="clang-${CLANG_VERSION}"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CXX="clang++" CC="clang"; fi
+  - which $CXX
+  - which $CC
+  - $CXX --version
+  - cmake --version
+  - |
+    if [ "$IS_UPDATE_CMAKE" == "TRUE" ];then
+        if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+            if [[ "$TRAVIS_CPU_ARCH" == "amd64" ]]; then
+                wget https://github.com/Kitware/CMake/releases/download/v3.18.4/cmake-3.18.4-Linux-x86_64.sh
+                chmod +x cmake-3.18.4-Linux-x86_64.sh
+                sudo ./cmake-3.18.4-Linux-x86_64.sh --prefix=/usr/local --skip-license
+                export PATH=/usr/local/bin:$PATH
+            else
+                wget https://github.com/Kitware/CMake/releases/download/v3.18.4/cmake-3.18.4.tar.gz
+                tar -xzvf cmake-3.18.4.tar.gz
+                cd cmake-3.18.4
+                ./configure --prefix=/usr/local
+                make -j8
+                sudo make install
+                export PATH=/usr/local/bin:$PATH
+            fi
+        fi
+    fi
+  - which cmake
+  - cmake --version
+
+script:
+  - cd ${TRAVIS_BUILD_DIR}
+  - mkdir -p bin && cd bin
+  - |
+    cmake .. \
+      -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+      -DCOMMLITE_EXE_STATIC=$COMMLITE_EXE_STATIC
+  - cmake --build .
+  - file commlite
