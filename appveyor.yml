@@ -1,0 +1,53 @@
+version: 1.0.{build}
+image: Visual Studio 2015
+clone_depth: 1
+environment:
+  build_type: Release
+  matrix:
+  - compiler: mingw-4.9.2-posix-win32
+    generator: MinGW Makefiles
+    cxx_path: C:\Qt\Tools\mingw492_32\bin
+  - compiler: mingw-5.3.0-posix-win32
+    generator: MinGW Makefiles
+    cxx_path: C:\mingw-w64\i686-5.3.0-posix-dwarf-rt_v4-rev0\mingw32\bin
+  - compiler: mingw-7.3.0-posix-win64
+    generator: MinGW Makefiles
+    cxx_path: C:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
+install:
+- ps: |
+    # git bash conflicts with MinGW makefiles
+    if ($env:generator -eq "MinGW Makefiles") 
+    {
+          $env:path = $env:path.replace("C:\Program Files\Git\usr\bin;", "")
+          if ($env:cxx_path -ne "") 
+          {
+               $env:path = "$env:cxx_path;" + $env:path
+          }
+    }
+
+
+    Write-Output "APPVEYOR_BUILD_FOLDER: $env:APPVEYOR_BUILD_FOLDER"
+    Write-Output "Compiler: $env:compiler"
+    Write-Output "Generator: $env:generator"
+    # Write-Output "Path: $env:path"
+    Write-Output "Env:build_type: $env:build_type"
+build_script:
+- ps: |
+    cd $env:APPVEYOR_BUILD_FOLDER
+
+    mkdir bin
+
+    cd bin
+
+    cmake -G "$env:generator" -DCMAKE_BUILD_TYPE="$env:build_type" ..  
+
+    cmake --build .
+
+    dir
+notifications:
+- provider: Email
+  to:
+  - itas109@qq.com
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true
