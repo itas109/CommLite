@@ -88,7 +88,7 @@ elseif(UNIX)
 	endif()
 
 	add_custom_target(compile_ncurses
-		COMMAND ./configure --prefix=${ncurses_BINARY_DIR}
+		COMMAND ./configure --prefix=${ncurses_BINARY_DIR} --enable-widec --with-terminfo-dirs="/etc/terminfo:/lib/terminfo:/usr/share/terminfo" CPPFLAGS="-P"
 		COMMAND make -j 8
 		COMMAND make install
 		COMMENT "configure, compile and install ncurses"
@@ -106,7 +106,7 @@ include_directories(src) # tui.h
 include_directories(${cserialport_SOURCE_DIR}/include) # CSerialPort headers
 
 include_directories(${ncurses_BINARY_DIR}/include)
-include_directories(${ncurses_BINARY_DIR}/include/ncurses)# tui.h
+include_directories(${ncurses_BINARY_DIR}/include/ncursesw)# tui.h
 link_directories(${ncurses_BINARY_DIR}/lib)
 
 file(GLOB_RECURSE COMMON_SOURCES ${cserialport_SOURCE_DIR}/src/SerialPort.cpp ${cserialport_SOURCE_DIR}/src/SerialPortBase.cpp ${cserialport_SOURCE_DIR}/src/SerialPortInfo.cpp ${cserialport_SOURCE_DIR}/src/SerialPortInfoBase.cpp)
@@ -127,7 +127,7 @@ IF (WIN32)
 	target_link_libraries( ${PROJECT_NAME} setupapi pdcurses libgcc.a libstdc++.a libpthread.a)
 	# target_link_libraries( ${PROJECT_NAME} setupapi pdcurses)
 elseif(APPLE)
-    target_link_libraries( ${PROJECT_NAME} ${FOUNDATION_LIBRARY} ${IOKIT_LIBRARY} ncurses)
+    target_link_libraries( ${PROJECT_NAME} ${FOUNDATION_LIBRARY} ${IOKIT_LIBRARY} ncursesw)
 elseif(UNIX)
-	target_link_libraries( ${PROJECT_NAME} pthread ncurses)
+	target_link_libraries( ${PROJECT_NAME} pthread ncursesw)
 ENDIF ()
