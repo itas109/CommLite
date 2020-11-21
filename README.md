@@ -34,10 +34,11 @@ CommLite已经在以下平台做过测试:
 # Quick Start 快速开始
 
 ```
-$ git clone https://github.com/itas109/CommLite.git
+$ git clone --depth=1 https://github.com/itas109/CommLite.git
 $ cd CommLite
-$ cmake -B bin .
-$ cmake --build bin
+$ mkdir bin && cd bin
+$ cmake ..
+$ cmake --build .
 ```
 
 # Screenshot 截图

@@ -34,10 +34,11 @@ CommLite has been tested to the following platforms:
 # Quick Start
 
 ```
-$ git clone https://github.com/itas109/CommLite.git
+$ git clone --depth=1 https://github.com/itas109/CommLite.git
 $ cd CommLite
-$ cmake -B bin .
-$ cmake --build bin
+$ mkdir bin && cd bin
+$ cmake ..
+$ cmake --build .
 ```
 
 # Screenshot
