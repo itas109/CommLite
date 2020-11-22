@@ -7,6 +7,6 @@ Comment[es]=commlite
 Comment[zh_CN]=commlite
 Exec=/opt/apps/com.itas109.commlite/bin/commlite
 Type=Application
-Categories=Application;
+Categories=Development;Utility;Application;
 Icon=/usr/share/icons/hicolor/scalable/apps/com.itas109.commlite.svg
 Terminal=true
