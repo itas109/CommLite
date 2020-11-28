@@ -14,6 +14,9 @@
 #include <time.h>
 #include "tui.h"
 
+menu *_mp;
+char *_mtitle;
+
 void statusmsg(char *);
 int waitforkey(void);
 void rmerror(void);
@@ -323,7 +326,9 @@ static void mainmenu(menu *mp)
         case KEY_ESC:
             mainhelp();
             break;
-
+        case KEY_RESIZE:
+            startmenu(_mp, _mtitle);
+            break;
         default:
             cur0 = cur;
 
@@ -558,6 +563,8 @@ void startmenu(menu *mp, char *mtitle)
     initscr();
     incurses = TRUE;
     initcolor();
+    _mp = mp;
+    _mtitle = mtitle;
 
     wtitl = subwin(stdscr, th, bw, 0, 0);
     wmain = subwin(stdscr, mh, bw, th, 0);
