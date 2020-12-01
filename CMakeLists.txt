@@ -50,8 +50,6 @@ endif()
 message(STATUS "CSerialPort_SOURCE_DIR : ${cserialport_SOURCE_DIR}")
 message(STATUS "CSerialPort_BINARY_DIR : ${cserialport_BINARY_DIR}")
 
-
-
 IF (WIN32)
 	FetchContent_Declare( # cmake 3.11 above
 		ncurses
@@ -86,10 +84,25 @@ elseif(UNIX)
 	# Fetch the content using previously declared details
 	FetchContent_Populate(ncurses)
 	endif()
+	
+	if(CMAKE_TOOLCHAIN_FILE)
+		# cpu arch
+		if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm")
+		    	set(ncurses_host_option "--host=arm-linux-gnueabi")
+		elseif(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "aarch64")
+		    	set(ncurses_host_option "--host=aarch64-linux-gnu")
+		elseif(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "mips64el")
+		    	set(ncurses_host_option "--host=mips64el-linux-gnuabi64")
+		else()
+			set(ncurses_host_option "")
+		endif()
+	else()
+		set(ncurses_host_option "")
+	endif()
 
 	add_custom_target(compile_ncurses
-		COMMAND ./configure --prefix=${ncurses_BINARY_DIR} --enable-widec --with-terminfo-dirs="/etc/terminfo:/lib/terminfo:/usr/share/terminfo" CPPFLAGS="-P"
-		COMMAND make -j 8
+		COMMAND ./configure --prefix=${ncurses_BINARY_DIR} ${ncurses_host_option} --enable-widec --with-terminfo-dirs="/etc/terminfo:/lib/terminfo:/usr/share/terminfo" CPPFLAGS="-P" --without-manpages --without-progs --without-tack --without-tests
+		COMMAND make
 		COMMAND make install
 		COMMENT "configure, compile and install ncurses"
 		WORKING_DIRECTORY ${ncurses_SOURCE_DIR}
