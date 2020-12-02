@@ -101,7 +101,7 @@ elseif(UNIX)
 	endif()
 
 	add_custom_target(compile_ncurses
-		COMMAND ./configure --prefix=${ncurses_BINARY_DIR} ${ncurses_host_option} --enable-widec --with-terminfo-dirs="/etc/terminfo:/lib/terminfo:/usr/share/terminfo" CPPFLAGS="-P" --without-manpages --without-progs --without-tack --without-tests
+		COMMAND ./configure --prefix=${ncurses_BINARY_DIR} ${ncurses_host_option} --enable-widec --with-terminfo-dirs="/etc/terminfo:/lib/terminfo:/usr/share/terminfo" CPPFLAGS="-P" --without-manpages --without-ada --disable-stripping --without-tack --without-tests
 		COMMAND make
 		COMMAND make install
 		COMMENT "configure, compile and install ncurses"
