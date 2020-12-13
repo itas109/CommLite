@@ -37,16 +37,16 @@ bool isShowHex = false;
 class mySlot : public has_slots<>
 {
 public:
-	mySlot(CSerialPort & sp)
+	mySlot(CSerialPort * sp)
     {
 	    recLen = -1;
-        m_sp = sp; 
+        p_sp = sp; 
     };
 
 	void OnSendMessage()
 	{
 		//read
-		recLen = m_sp.readAllData(str);
+		recLen = p_sp->readAllData(str);
 
         if(recLen > 0)
         {
@@ -71,7 +71,7 @@ private:
 	mySlot(){};
 
 private:
-	CSerialPort m_sp;
+	CSerialPort * p_sp;
 
     int recLen;
     char hexChar[4];// two bit hex +  one bit space + '\0'
@@ -92,7 +92,7 @@ std::string m_sendData = "https://github.com/itas109/CSerialPort";
 
 vector<SerialPortInfo> m_availablePortsList;
 CSerialPort m_serialPort;
-mySlot receive(m_serialPort);
+mySlot receive(&m_serialPort);
 
 std::string getPortSetting(void)
 {
@@ -375,7 +375,7 @@ menu SubMenuSetting[] =
     { "Open", open, "open serial port" },
     { "Close", close, "close serial port" },
     { "CommStatus", getCommStatus, "get Comm Status,such as [ opened ] - /dev/ttyS0,9600,None,8,1" },
-    //{ "Exit", DoExit, "Exit Appliction" },
+    { "Exit", DoExit, "Exit Appliction" },
     { "", (FUNC)0, "" }
 };
 
