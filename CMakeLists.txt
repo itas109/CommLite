@@ -144,3 +144,6 @@ elseif(APPLE)
 elseif(UNIX)
 	target_link_libraries( ${PROJECT_NAME} pthread ncursesw)
 ENDIF ()
+
+# package
+include(cmake/commliteCPack.cmake)
