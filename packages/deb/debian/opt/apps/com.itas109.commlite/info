@@ -2,7 +2,7 @@
     "appid": "com.itas109.commlite",
     "name": "com.itas109.commlite",
     "version": "1.0.0",
-    "arch": ["amd64"],
+    "arch": ["amd64","arm64","armhf","mips64el"],
     "permissions": {
         "autostart": false,
         "notification": false,
