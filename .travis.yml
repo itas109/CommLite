@@ -2,42 +2,13 @@ language: cpp
 
 # https://docs.travis-ci.com/user/languages/cpp
 
-# gcc 4.8
-addons: &gcc48
-  apt:
-    packages:
-      - g++-4.8
-    sources:
-      - ubuntu-toolchain-r-test
+# default
+os: linux
+dist: xenial
 
-# gcc 7.0
-addons: &gcc7
-  apt:
-    packages:
-      - g++-7
-    sources:
-      - ubuntu-toolchain-r-test
-
-# Clang 3.5
-addons: &clang35
-  apt:
-    packages:
-      - clang-3.5
-    sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.5
-      
-
-addons: &clang10
-  apt:
-    packages:
-      - clang-10
-      - lldb-10
-      - lld-10
-    sources:
-      - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
-        key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
-
+git:
+  depth: 1
+  submodules: false
 
 jobs:
   include:
@@ -46,21 +17,37 @@ jobs:
       os: linux
       arch: amd64
       dist: trusty
-      addons: *gcc48
+      addons:
+          apt:
+            packages:
+              - g++-4.8
+            sources:
+              - ubuntu-toolchain-r-test
 
     # Test gcc-7: Build=Release
     - env: GCC_VERSION=7 BUILD_TYPE=Release COMMLITE_EXE_STATIC=ON
       os: linux
       arch: amd64
       dist: xenial
-      addons: *gcc7
+      addons:
+          apt:
+            packages:
+              - g++-7
+            sources:
+              - ubuntu-toolchain-r-test
 
     # Test clang-3.5: Build=Release
     - env: CLANG_VERSION=3.5 BUILD_TYPE=Release COMMLITE_EXE_STATIC=ON
       os: linux
       arch: amd64
       dist: xenial
-      addons: *clang35
+      addons:
+          apt:
+            packages:
+              - clang-3.5
+            sources:
+              - ubuntu-toolchain-r-test
+              - llvm-toolchain-precise-3.5
 
       # osx
     - env: BUILD_TYPE=Release
@@ -72,28 +59,44 @@ jobs:
       os: linux
       arch: amd64
       dist: bionic
-      addons: *clang10
+      addons:
+          apt:
+            packages:
+              - clang-10
+              - lldb-10
+              - lld-10
+            sources:
+              - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
+                key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
 
     # Test gcc-7: Build=Debug/Release
     - env: GCC_VERSION=7 BUILD_TYPE=Debug COMMLITE_EXE_STATIC=ON IS_UPDATE_CMAKE=FALSE
       os: linux
       arch: s390x
       dist: focal
-      addons: *gcc7
+      addons:
+          apt:
+            packages:
+              - g++-7
+            sources:
+              - ubuntu-toolchain-r-test
 
     - env: GCC_VERSION=7 BUILD_TYPE=Release COMMLITE_EXE_STATIC=ON IS_UPDATE_CMAKE=FALSE
       os: linux
       arch: ppc64le
       dist: focal
-      addons: *gcc7
+      addons:
+          apt:
+            packages:
+              - g++-7
+            sources:
+              - ubuntu-toolchain-r-test
     
     # Test gcc-9: Build=Release
     - env: GCC_VERSION=9 BUILD_TYPE=Release COMMLITE_EXE_STATIC=ON IS_UPDATE_CMAKE=FALSE
       os: linux
       arch: arm64
       dist: focal
-      addons:
-
 
 before_script:
   - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}"; fi
