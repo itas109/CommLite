@@ -39,6 +39,23 @@ $ cd CommLite
 $ mkdir bin && cd bin
 $ cmake ..
 $ cmake --build .
+$ ./commlite
+```
+linux打包 deb
+```
+$ cd bin
+$ cpack .
+```
+ubuntu 20.04 交叉编译 aarch64/arm/mips64el
+```
+$ sudo apt-get install g++-aarch64-linux-gnu
+$ ./cmake_build_aarch64.sh
+
+$ sudo apt-get install g++-arm-linux-gnueabi
+$ ./cmake_build_arm.sh
+
+$ sudo apt-get install g++-mips64el-linux-gnuabi64
+$ ./cmake_build_mips64el.sh
 ```
 
 # Screenshot 截图
