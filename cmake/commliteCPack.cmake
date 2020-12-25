@@ -44,7 +44,7 @@ set(CPACK_DEBIAN_PACKAGE_PRIORITY "standard")
 include(CPack)
 
 # do not make the install target depend on the all target
-set(CMAKE_SKIP_install_ALL_DEPENDENCY true)
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
 # install application
 install(FILES ${PROJECT_BINARY_DIR}/commlite DESTINATION /opt/apps/com.itas109.commlite/bin PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 # install desktop
