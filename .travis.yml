@@ -92,6 +92,7 @@ jobs:
       os: linux
       arch: arm64
       dist: focal
+      addons:
 
 
 before_script:
