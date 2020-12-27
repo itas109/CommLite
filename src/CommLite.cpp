@@ -5,8 +5,8 @@
  * Github : https://github.com/itas109 \n
  * QQ Group : 12951803
  * @brief  CommLite, a lightweight serial port application based CSerialPort 基于CSerialPort的轻量级串口助手CommLite
- * @version 1.0.0
- * @date 2020-09-06
+ * @version 1.0.1
+ * @date 2020-12-27
  * @copyright The CommLite is Copyright (C) 2020 itas109. \n
  * Contact: itas109@qq.com \n\n
  *  You may use, distribute and copy the CommLite under the terms of \n
@@ -23,7 +23,7 @@
 
 #include "tui.h"
 
-#define COMMLITE_VERSION "1.0.0"
+#define COMMLITE_VERSION "1.0.1"
 
 // CSerialPort
 #include "CSerialPort/SerialPort.h"
