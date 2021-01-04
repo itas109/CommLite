@@ -9,10 +9,13 @@ endif()
 
 option(COMMLITE_EXE_STATIC "Build static commlite" OFF)
 
+# https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html
 message(STATUS "CommLite CMake Info")
 message(STATUS "=======================================================")
-message(STATUS "    Operation System :  ${CMAKE_SYSTEM}")
-message(STATUS "    CPU Architecture : ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "    Host Operation System :  ${CMAKE_HOST_SYSTEM}")
+message(STATUS "    Host CPU Architecture : ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+message(STATUS "    Target Operation System :  ${CMAKE_SYSTEM}")
+message(STATUS "    Target CPU Architecture : ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "    Build Type : ${CMAKE_BUILD_TYPE}${CMAKE_CONFIGURATION_TYPES}")
 message(STATUS "    EXE Static : ${COMMLITE_EXE_STATIC}")
 message(STATUS "=======================================================")
@@ -85,24 +88,31 @@ elseif(UNIX)
 	FetchContent_Populate(ncurses)
 	endif()
 	
-	if(CMAKE_TOOLCHAIN_FILE)
+	# https://cmake.org/cmake/help/latest/variable/CMAKE_CROSSCOMPILING.html
+	if(CMAKE_CROSSCOMPILING)
 		# cpu arch
 		if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm")
-		    	set(ncurses_host_option "--host=arm-linux-gnueabi")
+		    set(ncurses_host_option "--host=arm-linux-gnueabi")
 		elseif(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "aarch64")
-		    	set(ncurses_host_option "--host=aarch64-linux-gnu")
+		    set(ncurses_host_option "--host=aarch64-linux-gnu")
 		elseif(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "mips64el")
-		    	set(ncurses_host_option "--host=mips64el-linux-gnuabi64")
+		    set(ncurses_host_option "--host=mips64el-linux-gnuabi64")
+		elseif(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "sw_64")
+		    set(ncurses_host_option "--host=alpha-linux-gnu")
 		else()
 			set(ncurses_host_option "")
 		endif()
 	else()
-		set(ncurses_host_option "")
+		if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "sw_64")
+			set(ncurses_host_option "--build=alpha-linux-gnu")
+		else()
+			set(ncurses_host_option "")
+		endif()
 	endif()
 
 	add_custom_target(compile_ncurses
 		COMMAND ./configure --prefix=${ncurses_BINARY_DIR} ${ncurses_host_option} --enable-widec --with-terminfo-dirs="/etc/terminfo:/lib/terminfo:/usr/share/terminfo" CPPFLAGS="-P" --without-manpages --without-ada --disable-stripping --without-tack --without-tests
-		COMMAND make
+		COMMAND make -j8
 		COMMAND make install
 		COMMENT "configure, compile and install ncurses"
 		WORKING_DIRECTORY ${ncurses_SOURCE_DIR}

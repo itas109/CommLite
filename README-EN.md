@@ -20,12 +20,12 @@ Language: <strong>English</strong> / <a href="README.md">中文</a>
 
 CommLite is tui's serial port tool based CSerialPort
 
-# Platform 平台
+# Platform
 CommLite has been tested to the following platforms:
 
    - DOS ( x86_64 )
    - Windows ( x86_64 )
-   - Linux ( x86_64, aarch64, mips64el, s390x, ppc64le )
+   - Linux ( x86_64, aarch64, mips64el, sw_64, s390x, ppc64le )
    - macOS ( x86_64 )
    - Raspberry Pi ( armv7l )
    - FreeBSD ( x86_64 )
