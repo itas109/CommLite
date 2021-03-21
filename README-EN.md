@@ -3,6 +3,7 @@
 <p align="center">
 <a href="https://github.com/itas109/CommLite/releases"><img alt="Version" src="https://img.shields.io/github/release/itas109/CommLite"/></a>
 <a href="https://github.com/itas109/CommLite/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/itas109/CommLite"/></a>
+<a href="https://gitee.com/itas109/CommLite"><img alt="Stars" src="https://gitee.com/itas109/CommLite/badge/star.svg?theme=dark"/></a>
 <a href="https://github.com/itas109/CommLite/network/members"><img alt="Forks" src="https://img.shields.io/github/forks/itas109/CommLite"/></a>
 <a href="https://github.com/itas109/CommLite/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/badge/License-LGPL%203.0-orange"/></a>
 <img alt="language" src="https://img.shields.io/badge/language-c++-red"/>
